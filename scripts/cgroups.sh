@@ -3,6 +3,7 @@
 #           2014 Tianon Gravi
 # Author: Serge Hallyn <serge.hallyn@canonical.com>
 #         Tianon Gravi <admwiggin@gmail.com>
+sudo su
 set -e
 
 # for simplicity this script provides no flexibility

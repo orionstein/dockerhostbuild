@@ -18,10 +18,9 @@ endif
 buildroot: setup
 	sudo cp ./.setup/Dockerfile-build ./Dockerfile
 	sudo docker build -t $(LIB_NAME) --rm=true .
-	sudo docker run -v $(CURRENT_DIR)/ccache:/root/.buildroot-ccache -v $(CURRENT_DIR)/scripts:/opt/buildroot/scripts -it --name $(LIB_NAME)-run $(LIB_NAME)
+	sudo docker run -v $(CURRENT_DIR)/ccache:/root/.buildroot-ccache -v $(CURRENT_DIR)/scripts:/opt/buildroot/scripts -v $(CURRENT_DIR)/build:/opt/buildroot/output/build -it --name $(LIB_NAME)-run $(LIB_NAME)
 	sudo rm -rf ./$(BUILD_DIR)
-	sudo docker cp $(LIB_NAME)-run:/opt/buildroot/output/build .
-	sudo docker cp $(LIB_NAME)-run:/opt/buildroot/output/images .
+	sudo docker cp $(LIB_NAME)-run:/opt/buildroot/output/$(BUILD_DIR) .
 	sudo docker stop $(LIB_NAME)-run
 	sudo docker rm $(LIB_NAME)-run
 	sudo rm ./Dockerfile
