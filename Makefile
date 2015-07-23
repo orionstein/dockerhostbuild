@@ -15,7 +15,7 @@ ifneq ($(RUN_LIB),)
 	sudo docker rm -f '$(LIB_NAME)-run'
 endif
 ifeq ($(HAS_VOL),)
-	sudo docker run -v /opt/buildroot/output/build -v /root/.buildroot-ccache -v ~/.buildroot-ccache --name $(LIB_NAME)-vol orionstein/buildroot-builder:latest /bin/true
+	sudo docker run -v /opt/buildroot/output -v /root/.buildroot-ccache -v /opt/buildroot/dl --name $(LIB_NAME)-vol orionstein/buildroot-builder:volume /bin/true
 endif
 
 buildroot: setup
@@ -37,3 +37,10 @@ config: setup
 	sudo docker rm $(LIB_NAME)-runconfig
 	sudo rm ./Dockerfile
 
+cli: setup
+	sudo cp ./.setup/Dockerfile-build ./Dockerfile
+	sudo docker build -t $(LIB_NAME) --rm=true .
+	sudo docker run -v $(CURRENT_DIR)/scripts:/opt/buildroot/scripts --volumes-from $(LIB_NAME)-vol -it --name $(LIB_NAME)-run $(LIB_NAME) /bin/bash
+	sudo docker stop $(LIB_NAME)-run
+	sudo docker rm $(LIB_NAME)-run
+	sudo rm ./Dockerfile
