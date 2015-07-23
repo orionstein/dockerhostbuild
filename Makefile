@@ -1,16 +1,12 @@
 LIB_NAME := buildroot-runner
 BUILD_DIR := images
 CURRENT_DIR = $(shell pwd)
-EXIT_LIB = $(shell sudo docker ps -a | grep 'Exited' | grep '$(LIB_NAME)'-run)
 RUN_LIB = $(shell sudo docker ps -a | grep '$(LIB_NAME)'-run)
 HAS_VOL = $(shell sudo docker ps -a | grep '$(LIB_NAME)'-vol)
 
 all: buildroot
 
 setup:
-ifneq ($(EXIT_LIB),)
-	sudo docker rm '$(LIB_NAME)-run'
-endif
 ifneq ($(RUN_LIB),)
 	sudo docker rm -f '$(LIB_NAME)-run'
 endif
